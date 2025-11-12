@@ -2,6 +2,9 @@
 find_package(RE2C 3 REQUIRED)
 RE2C_TARGET(NAME lexers_ut_trig_handler INPUT ${PROJECT_SOURCE_DIR}/src/lexers.re OUTPUT lexers.c OPTIONS ${RE2C_OPTIONS} -W DEPENDS ${PROJECT_SOURCE_DIR}/inc/lexers.h)
 
+RE2C_TARGET(NAME timer_parser_ut_trig_handler INPUT ${PROJECT_SOURCE_DIR}/src/timer_parser.re OUTPUT timer_parser.c OPTIONS ${RE2C_OPTIONS} -W DEPENDS ${PROJECT_SOURCE_DIR}/inc/timer.h)
+
+
 create_unit_test(
   NAME
     utest-crinit-cfg-trig-handler
@@ -13,6 +16,7 @@ create_unit_test(
     case-success.c
     case-err-config-type.c
     lexers.c
+    timer_parser.c
     ${PROJECT_SOURCE_DIR}/src/logio.c
     ${PROJECT_SOURCE_DIR}/src/confconv.c
     ${PROJECT_SOURCE_DIR}/src/confhdl.c
@@ -21,6 +25,7 @@ create_unit_test(
     ${PROJECT_SOURCE_DIR}/src/envset.c
     ${PROJECT_SOURCE_DIR}/src/ioredir.c
     ${PROJECT_SOURCE_DIR}/src/task.c
+    ${PROJECT_SOURCE_DIR}/src/timer.c
     $<IF:$<BOOL:${ENABLE_CGROUP}>,${PROJECT_SOURCE_DIR}/src/cgroup.c,>
   LIBRARIES
     libmockfunctions

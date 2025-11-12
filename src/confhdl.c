@@ -31,6 +31,7 @@
 #include "globopt.h"
 #include "lexers.h"
 #include "logio.h"
+#include "timer.h"
 
 /**
  * Macro to assert that the given crinitConfigType_t in a crinitConfigHandler_t has a specific value.
@@ -272,7 +273,7 @@ static int crinitDepListHandler(crinitTaskDep_t **list, size_t *listSize, const 
 
         char *strtokState = NULL;
         (*list)[i].name = strtok_r((*list)[i].name, ":", &strtokState);
-        (*list)[i].event = strtok_r(NULL, ":", &strtokState);
+        (*list)[i].event = strtok_r(NULL, " ", &strtokState);
 
         if ((*list)[i].name == NULL || (*list)[i].event == NULL) {
             crinitErrPrint("Could not parse dependency '%s'.", tempDeps[i - oldSz]);
@@ -280,6 +281,9 @@ static int crinitDepListHandler(crinitTaskDep_t **list, size_t *listSize, const 
             free((*list)[i].name);
             crinitFreeArgvArray(tempDeps);
             return -1;
+        }
+        if (strcmp((*list)[i].name, "@timer") == 0) {
+            crinitTimerAdd((*list)[i].event);
         }
 #ifndef ENABLE_ELOS
         if (strcmp((*list)[i].name, "@elos") == 0) {

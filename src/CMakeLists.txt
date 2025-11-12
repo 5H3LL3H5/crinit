@@ -55,6 +55,14 @@ endif()
 
 RE2C_TARGET(NAME lexers INPUT ${PROJECT_SOURCE_DIR}/src/lexers.re OUTPUT lexers.c OPTIONS ${RE2C_OPTIONS} -W DEPENDS ${PROJECT_SOURCE_DIR}/inc/lexers.h)
 
+RE2C_TARGET(
+  NAME timer_parser
+  INPUT ${PROJECT_SOURCE_DIR}/src/timer_parser.re
+  OUTPUT timer_parser.c
+  OPTIONS ${RE2C_OPTIONS} -W
+  DEPENDS ${PROJECT_SOURCE_DIR}/inc/timer.h
+)
+
 # optional compile-time features
 
 if(ENABLE_SIGNATURE_SUPPORT)
@@ -81,6 +89,8 @@ add_executable(
   procdip.c
   logio.c
   globopt.c
+  timer.c
+  timer_parser.c
   minsetup.c
   thrpool.c
   notiserv.c

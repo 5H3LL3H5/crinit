@@ -23,6 +23,8 @@
   - [Example Task Configuration](#example-task-configuration)
     - [Explanation](#explanation-1)
   - [Setting Environment Variables](#setting-environment-variables)
+  - [Defining timers](#defining-timers)
+    - [example](#example)
   - [Defining Elos Filters](#defining-elos-filters)
     - [Ruleset](#ruleset)
   - [Include files](#include-files)
@@ -402,6 +404,93 @@ GREETING=Good evening!                     # Override of global variable.
 ESCAPED_VAR=Global variable name: ${FOO}   # Avoid variable expansion through escaping.
 VAR_WITH_ESC_SEQUENCES=hex  hex            # Support for escape sequences including hexadecimal bytes.
 ```
+
+### Defining timers
+
+```
+Weekday-Year-Month-Day-Hour:Minute:Second+Timezone
+```
+
+All parts can be either a single entry.
+
+Or a range separated by `<start>..<end>`, start and end of a range can be left blank (except for the weekday) and will default to the lowest or highest possible value (00:..04 -> 00:00..04, 00:20.. -> 00:20..59).
+
+`*` can be used as a shorthand to specify the whole range.
+
+A range starting higher than the end wraps around, and includes all values from start to maximum and mimimum to the end (ie for month: 11..2 -> Nov, Dec, Jan, Feb).
+
+**Weekday:** is either the full weekday (Monday, Tuesday, ...) or the first 3 letters (Mon, Tue, ...) case insensitive.
+
+**Year:** is a year between 0 and 65535 or a range. Default is the range 0..65535.
+**Month:** is a number between 1 and 12 or a range. Default is the range 1..12.
+**Day:** is a number between 1 and 31 or a range. Default is the range 1..31.
+
+**Hour:** is in 24-hour format a number between 0 and 23 or a range. Default is midnight/00.
+**Minute:** is a minute between 0 and 59 or a range. Default is 00 the first minute of a matching hour.
+**Second:** is a second between 0 and 59 or a range. Default is 00 the first second of a matching minute. Can be left out when specifying the time.
+**Timezone:** is an offset of hours between -13 and +15 and minutes between 0 and 59. Default +0000. Can be left out when specifying the time.
+
+
+#### example
+- `*`
+  `daily`
+  `midnight`
+  `*-*-*-*-00:00:00`
+  `Mon..Sun-0..65535-1..12-1..31-00:00:00`
+  crontab: `0 0 * * *`
+  systemd onCalandar: `* *-*-* 00:00:00`
+- `Mon`
+  `weekly`
+  `Mon-*-*-*-00:00:00`
+  crontab: `0 0 * * 1`
+  systemd onCalandar: `Mon *-*-* 00:00:00`
+- `Sat-23:45:00`
+  `Sat-*-*-*-23:45:00`
+  crontab: `45 23 * * 6`
+  systemd onCalandar: `Sat *-*-* 23:45:00`
+- `Mon..Fri-12..14:15..45:00`
+  `Mon..Fri-*-*-*-12..14:15..45:00`
+  crontab: `15-45 12-14 * * 1-5`
+  systemd onCalandar: `Mon..Fri *-*-* 12..14:15..45:00`
+- `*-2..11-12`
+  `*-*-2..11-12-00:00:00`
+  `Mon..Sun-0..65535-2..11-12-00:00:00`
+  crontab: `0 0 12 2-11 *`
+  systemd onCalandar: `Mon..Fri *-2..11-12 00:00:00`
+- `Sat..Thu`
+  `Sat..Thu-*-*-*-00:00:00:`
+  systemd onCalandar: `Mon..Thu,Sat,Sun *-*-* 00:00:00`
+- `minutely`
+  `*-*-*-*-*:*:00`
+  crontab: `* * * * *`
+  systemd onCalandar: `*-*-* *:00:00`
+- `hourly`
+  `*-*-*-*-*:00:00`
+  crontab: `0 * * * *`
+  systemd onCalandar: `*-*-* *:00:00`
+- `monthly`
+  `*-*-*-01-00:00:00`
+  crontab: `0 0 1 * *`
+  systemd onCalandar: `*-*-1 00:00:00`
+- `yearly`
+  `annually`
+  `*-01-01`
+  `*-*-01-01-00:00:00`
+  crontab: `0 0 1 1 *`
+  systemd onCalandar: `*-01-01 00:00:00`
+- `2030-*-30..01-12:2..58`
+  systemd onCalandar: `2030-*-01,30,31 01..12:01,02,58,59:00`
+
+
+```ini
+DEPENDS = @timer:Mon..Sun-0000..65535-01..12-01..31-00:00:00+0000
+DEPENDS = @timer:Wednsday-2030-10-25-00..23:00..59:00
+TRIGGER = @timer:Fri..Tue-12:30
+TRIGGER = @timer:yearly
+TRIGGER = @timer:anually
+TRIGGER = @timer:daily
+```
+
 
 ### Defining Elos Filters
 

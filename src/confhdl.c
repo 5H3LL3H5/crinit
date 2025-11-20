@@ -31,7 +31,7 @@
 #include "globopt.h"
 #include "lexers.h"
 #include "logio.h"
-#include "timer.h"
+#include "timerdb.h"
 
 /**
  * Macro to assert that the given crinitConfigType_t in a crinitConfigHandler_t has a specific value.
@@ -283,7 +283,7 @@ static int crinitDepListHandler(crinitTaskDep_t **list, size_t *listSize, const 
             return -1;
         }
         if (strcmp((*list)[i].name, "@timer") == 0) {
-            crinitTimerAdd((*list)[i].event);
+            crinitTimerDBAddTimer((*list)[i].event);
         }
 #ifndef ENABLE_ELOS
         if (strcmp((*list)[i].name, "@elos") == 0) {

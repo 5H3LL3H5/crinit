@@ -26,6 +26,7 @@ create_unit_test(
     ${PROJECT_SOURCE_DIR}/src/task.c
     ${PROJECT_SOURCE_DIR}/src/taskdb.c
     ${PROJECT_SOURCE_DIR}/src/timer.c
+    ${PROJECT_SOURCE_DIR}/src/timerdb.c
     ${CAPABILITIES_SOURCES}
   LIBRARIES
     libmockfunctions

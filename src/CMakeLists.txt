@@ -90,6 +90,7 @@ add_executable(
   logio.c
   globopt.c
   timer.c
+  timerdb.c
   timer_parser.c
   minsetup.c
   thrpool.c

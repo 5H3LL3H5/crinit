@@ -23,6 +23,7 @@ create_unit_test(
     ${PROJECT_SOURCE_DIR}/src/sig.c
     ${PROJECT_SOURCE_DIR}/src/common.c
     ${PROJECT_SOURCE_DIR}/src/timer.c
+    ${PROJECT_SOURCE_DIR}/src/timerdb.c
     ${CAPABILITIES_SOURCES}
 LIBRARIES
     libmockfunctions

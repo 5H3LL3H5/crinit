@@ -228,46 +228,6 @@ bool crinitCheckTimerTime(struct timespec ts, crinitTimerDef_t *td) {
            (wDay & td->wDay);
 }
 
-static const char *crinitDayLookup[] = {
-    [0] = "Su", [1] = "Mo", [2] = "Tu", [3] = "We", [4] = "Th", [5] = "Fr", [6] = "Sa",
-};
-
-void crinitTimerAdd(char *timerStr) {
-    crinitInfoPrint("@timer:%s", timerStr);
-    crinitTimer_t timer = {0};
-    timer.name = strdup(timerStr);
-    crinitTimerParse(timer.name, &(timer.def));
-    crinitPrintTimerDef(&(timer.def));
-
-    struct timespec ti;
-    timespec_get(&ti, TIME_UTC);
-
-    char timeBuff[100];
-    char utcBuff[100];
-    struct tm t = {0};
-    struct tm utc = {0};
-
-    gmtime_r(&ti.tv_sec, &utc);
-    crinitZonedTimeR(&ti.tv_sec, timer.def.timezone, &t);
-    strftime(utcBuff, 100, "%F %H:%M:%S UTC", &utc);
-    strftime(timeBuff, 100, "%F %H:%M:%S %z", &t);
-    crinitDbgInfoPrint(" -  %s %s (%s)", crinitDayLookup[t.tm_wday], timeBuff, utcBuff);
-    for (size_t n = 1; n <= 20; n++) {
-        ti = crinitTimerNextTime(&ti, &(timer.def));
-        if (ti.tv_sec == 0 && ti.tv_nsec == 0) {
-            crinitDbgInfoPrint(" -  No next time found!!");
-            break;
-        }
-        gmtime_r(&ti.tv_sec, &utc);
-        crinitZonedTimeR(&ti.tv_sec, timer.def.timezone, &t);
-        strftime(utcBuff, 100, "%F %H:%M:%S UTC", &utc);
-        strftime(timeBuff, 100, "%F %H:%M:%S %z", &t);
-        crinitDbgInfoPrint("%2lu) %s %s (%s)", n, crinitDayLookup[t.tm_wday], timeBuff, utcBuff);
-    }
-
-    // TODO:  initialize, start timerfd and polling in timer thread
-}
-
 static int crinitMonthLength(uint8_t month, uint16_t year) {
     switch (month) {
         case 1:

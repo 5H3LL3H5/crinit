@@ -14,6 +14,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "timerdb.h"
+
 #ifdef ENABLE_CAPABILITIES
 #include "capabilities.h"
 #endif
@@ -824,6 +826,12 @@ threadExit:
         // should be reenable/rearmed here
         if (crinitTaskRearmTrigger(ctx, tCopy->name) == -1) {
             crinitErrPrint("(TID: %d) failed to rearm taks \'%s\'.", threadId, tCopy->name);
+        }
+    } else {
+        for (size_t i = 0; i < tCopy->trigSize; i++) {
+            if (0 == strcmp(tCopy->trig[i].name, "@timer")) {
+                crinitTimerDBRemoveTimer(tCopy->trig[i].event);
+            }
         }
     }
     crinitFreeTask(tCopy);

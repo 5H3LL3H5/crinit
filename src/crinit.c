@@ -20,6 +20,7 @@
 #include "optfeat.h"
 #include "procdip.h"
 #include "rtimopmap.h"
+#include "timerdb.h"
 
 #ifdef SIGNATURE_SUPPORT
 #include "sig.h"
@@ -211,6 +212,7 @@ int main(int argc, char *argv[]) {
 
     crinitTaskDB_t tdb;
     crinitTaskDBInit(&tdb, crinitProcDispatchSpawnFunc);
+    crinitTimerDBInit(&tdb);
 
     for (size_t n = 0; n < taskSeries.size; n++) {
         char *confFn = taskSeries.fnames[n];
@@ -266,6 +268,10 @@ int main(int argc, char *argv[]) {
     }
     crinitDestroyFileSeries(&taskSeries);
     crinitDbgInfoPrint("Done parsing.");
+    if (crinitTimerDBSpawn()) {
+        crinitErrPrint("Could not start timer pool.");
+        goto failFreeTaskDB;
+    }
 
     char *sockFile = getenv("CRINIT_SOCK");
     if (sockFile == NULL) {

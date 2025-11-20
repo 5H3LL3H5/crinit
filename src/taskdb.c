@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "crinit-sdefs.h"
+#include "timerdb.h"
 #ifdef ENABLE_ELOS
 #include "elos-common.h"
 #include "eloslog.h"
@@ -521,6 +522,9 @@ static int crinitTaskDBRemoveDepFromTaskStruct(crinitTask_t *pTask, const crinit
     for (size_t j = 0; j < pTask->depsSize; j++) {
         if ((strcmp(pTask->deps[j].name, dep->name) == 0) && (strcmp(pTask->deps[j].event, dep->event) == 0)) {
             crinitDbgInfoPrint("Removing dependency \'%s:%s\' in \'%s\'.", dep->name, dep->event, pTask->name);
+            if (0 == strcmp(dep->name, "@timer")) {
+                crinitTimerDBRemoveTimer(dep->event);
+            }
             free(pTask->deps[j].name);
             if (j < pTask->depsSize - 1) {
                 pTask->deps[j] = pTask->deps[pTask->depsSize - 1];

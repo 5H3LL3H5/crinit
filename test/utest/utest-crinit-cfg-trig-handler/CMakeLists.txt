@@ -26,6 +26,7 @@ create_unit_test(
     ${PROJECT_SOURCE_DIR}/src/ioredir.c
     ${PROJECT_SOURCE_DIR}/src/task.c
     ${PROJECT_SOURCE_DIR}/src/timer.c
+    ${PROJECT_SOURCE_DIR}/src/timerdb.c
     $<IF:$<BOOL:${ENABLE_CGROUP}>,${PROJECT_SOURCE_DIR}/src/cgroup.c,>
   LIBRARIES
     libmockfunctions

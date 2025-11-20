@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: MIT
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
+#include <bits/types/struct_itimerspec.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
@@ -25,6 +27,8 @@ typedef struct crinitTimerDef {
 typedef struct crinitTimer {
     crinitTimerDef_t def;
     char *name;
+    size_t refs;
+    struct itimerspec next;
 } crinitTimer_t;
 
 /**
@@ -102,12 +106,6 @@ int crinitSPrintTimerDef(char *s, crinitTimerDef_t *td);
  */
 void crinitPrintTimerDef(crinitTimerDef_t *td);
 
-/**
- * Adds a timer to crinits timer pool.
- *
- * @param timerStr  the configuration string for the timer
- */
-void crinitTimerAdd(char *timerStr);
 /**
  * Parses a timer definition from a string
  *

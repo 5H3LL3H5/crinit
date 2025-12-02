@@ -24,7 +24,7 @@
     - [Explanation](#explanation-1)
   - [Setting Environment Variables](#setting-environment-variables)
   - [Defining timers](#defining-timers)
-    - [example](#example)
+    - [Examples](#examples)
   - [Defining Elos Filters](#defining-elos-filters)
     - [Ruleset](#ruleset)
   - [Include files](#include-files)
@@ -431,56 +431,56 @@ A range starting higher than the end wraps around, and includes all values from 
 **Timezone:** is an offset of hours between -13 and +15 and minutes between 0 and 59. Default +0000. Can be left out when specifying the time.
 
 
-#### example
+#### Examples
+
 - `*`
   `daily`
   `midnight`
   `*-*-*-*-00:00:00`
   `Mon..Sun-0..65535-1..12-1..31-00:00:00`
-  crontab: `0 0 * * *`
-  systemd onCalandar: `* *-*-* 00:00:00`
+    - compared to crontab: `0 0 * * *`
+    - compared to systemd onCalandar: `* *-*-* 00:00:00`
 - `Mon`
   `weekly`
   `Mon-*-*-*-00:00:00`
-  crontab: `0 0 * * 1`
-  systemd onCalandar: `Mon *-*-* 00:00:00`
+    - compared to crontab: `0 0 * * 1`
+    - compared to systemd onCalandar: `Mon *-*-* 00:00:00`
 - `Sat-23:45:00`
   `Sat-*-*-*-23:45:00`
-  crontab: `45 23 * * 6`
-  systemd onCalandar: `Sat *-*-* 23:45:00`
+    - crontab: `45 23 * * 6`
+    - systemd onCalandar: `Sat *-*-* 23:45:00`
 - `Mon..Fri-12..14:15..45:00`
   `Mon..Fri-*-*-*-12..14:15..45:00`
-  crontab: `15-45 12-14 * * 1-5`
-  systemd onCalandar: `Mon..Fri *-*-* 12..14:15..45:00`
+    - compared to crontab: `15-45 12-14 * * 1-5`
+    - compared to systemd onCalandar: `Mon..Fri *-*-* 12..14:15..45:00`
 - `*-2..11-12`
   `*-*-2..11-12-00:00:00`
   `Mon..Sun-0..65535-2..11-12-00:00:00`
-  crontab: `0 0 12 2-11 *`
-  systemd onCalandar: `Mon..Fri *-2..11-12 00:00:00`
+    - compared to crontab: `0 0 12 2-11 *`
+    - compared to systemd onCalandar: `Mon..Fri *-2..11-12 00:00:00`
 - `Sat..Thu`
   `Sat..Thu-*-*-*-00:00:00:`
-  systemd onCalandar: `Mon..Thu,Sat,Sun *-*-* 00:00:00`
+    - compared to systemd onCalandar: `Mon..Thu,Sat,Sun *-*-* 00:00:00`
 - `minutely`
   `*-*-*-*-*:*:00`
-  crontab: `* * * * *`
-  systemd onCalandar: `*-*-* *:00:00`
+    - compared to crontab: `* * * * *`
+    - compared to systemd onCalandar: `*-*-* *:00:00`
 - `hourly`
   `*-*-*-*-*:00:00`
-  crontab: `0 * * * *`
-  systemd onCalandar: `*-*-* *:00:00`
+    - compared to crontab: `0 * * * *`
+    - compared to systemd onCalandar: `*-*-* *:00:00`
 - `monthly`
   `*-*-*-01-00:00:00`
-  crontab: `0 0 1 * *`
-  systemd onCalandar: `*-*-1 00:00:00`
+    - compared to crontab: `0 0 1 * *`
+    - compared to systemd onCalandar: `*-*-1 00:00:00`
 - `yearly`
   `annually`
   `*-01-01`
   `*-*-01-01-00:00:00`
-  crontab: `0 0 1 1 *`
-  systemd onCalandar: `*-01-01 00:00:00`
+    - compared to crontab: `0 0 1 1 *`
+    - compared to systemd onCalandar: `*-01-01 00:00:00`
 - `2030-*-30..01-12:2..58`
-  systemd onCalandar: `2030-*-01,30,31 01..12:01,02,58,59:00`
-
+    - compared to systemd onCalandar: `2030-*-01,30,31 01..12:01,02,58,59:00`
 
 ```ini
 DEPENDS = @timer:Mon..Sun-0000..65535-01..12-01..31-00:00:00+0000
